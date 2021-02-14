@@ -176,3 +176,8 @@ endtry
 try
   "au FileType yaml,yml
 endtry
+
+" Goyo.vim
+try
+  let g:goyo_width = 86
+endtry

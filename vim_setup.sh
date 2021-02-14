@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 # This was originally made for Vim, so this would need to be changed.
-sudo dnf install -y vim git
+sudo dnf install -y \
+  vim \
+  git \
+  fzf \
+  nodejs \
+  yarnpkg
 
 # Make sure you're in your home directory.
 cd ${HOME}
@@ -20,6 +25,7 @@ git clone https://github.com/dense-analysis/ale.git ${HOME}/.vim/pack/dense-anal
 git clone https://github.com/ctrlpvim/ctrlp.vim.git ${HOME}/.vim/pack/ctrlpvim/start/ctrlp.vim
 
 # FZF Fuzzy Finder
+# You'll need to install fzf on your system as well.
 git clone https://github.com/junegunn/fzf.vim.git ${HOME}/.vim/pack/junegunn/start/fzf.vim
 
 # OmniSharp, used for C# "Intellisense"
@@ -66,3 +72,33 @@ git clone https://github.com/junegunn/goyo.vim.git ${HOME}/.vim/pack/junegunn/st
 
 # Commander Of Completion, for (n)vim
 git clone https://github.com/neoclide/coc.nvim.git ${HOME}/.vim/pack/neoclide/start/coc.nvim
+
+# Docker and Dockerfiles
+git clone https://github.com/ekalinin/dockerfile.vim.git ${HOME}/.vim/pack/ekalinin/start/dockerfile.vim
+
+# Setting up coc.nvim
+# Install extensions
+mkdir -p ${HOME}/.config/coc/extensions
+cd ${HOME}/.config/coc/extensions
+if [ ! -f package.json ]
+then
+  echo '{"dependencies":{}}'> package.json
+fi
+# Change extension names to the extensions you need
+npm install \
+  --global-style \
+  --ignore-scripts \
+  --no-bin-links \
+  --no-package-lock \
+  --only=prod \
+    coc-json \
+    coc-yaml \
+    coc-sh \
+    coc-rls \
+    coc-python \
+    coc-markdownlint \
+    coc-eslint \
+    coc-css \
+    coc-tsserver
+# The coc-rls will require that the rustup component rust-rls be installed.
+# The coc-json coc-yaml will need to have Python's yamllint and jsonlint installed.
