@@ -76,6 +76,9 @@ git clone https://github.com/neoclide/coc.nvim.git ${HOME}/.vim/pack/neoclide/st
 # Docker and Dockerfiles
 git clone https://github.com/ekalinin/dockerfile.vim.git ${HOME}/.vim/pack/ekalinin/start/dockerfile.vim
 
+# Vim TODO Lists
+git clone https://github.com/aserebryakov/vim-todo-lists.git ${HOME}/.vim/pack/aserebryakov/start/vim-todo-lists
+
 # Setting up coc.nvim
 # Install extensions
 mkdir -p ${HOME}/.config/coc/extensions
