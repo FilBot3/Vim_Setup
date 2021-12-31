@@ -6,8 +6,8 @@
     - neovim
     - nvim
   vars:
-    neovim_config_dir: '{{ ansible_user_home }}/.config/nvim'
-    neovim_data_dir: '{{ ansible_user_home }}/.local/share/nvim'
+    neovim_config_dir: '{{ ansible_user_home | default("/home/filbot") }}/.config/nvim'
+    neovim_data_dir: '{{ ansible_user_home | default("/home/filbot") }}/.local/share/nvim'
     neovim_pack_dir: '{{ neovim_data_dir }}/site/pack'
     neovim_ft_dir: '{{ neovim_data_dir }}/site/ftplugin'
     neovim_channel: 'stable'
@@ -28,7 +28,7 @@
       become_method: sudo
       when: ( ansible_distribution == 'Fedora' )
     - name: Add Neovim PPA for Ubuntu/Pop!_OS
-      ansible.builtin.apt_repository: 
+      ansible.builtin.apt_repository:
         repo: 'ppa:neovim-ppa/{{ neovim_channel | default("stable") }}'
       become: true
       become_user: root
@@ -138,4 +138,17 @@
           dest: '{{ neovim_pack_dir }}/nvim-lua/start/plenary.nvim'
         - url: 'https://github.com/nvim-treesitter/nvim-treesitter.git'
           dest: '{{ neovim_pack_dir }}/nvim-treesitter/start/nvim-treesitter'
+    - name: Install Neovim LSP Servers
+      community.general.npm:
+        name: '{{ item }}'
+        global: true
+        state: present
+      become: true
+      become_user: root
+      become_method: sudo
+      loop:
+        - bash-language-server
+        - dockerfile-language-server-nodejs
+        - vscode-langservers-extracted
+        - yaml-language-server
 ...
