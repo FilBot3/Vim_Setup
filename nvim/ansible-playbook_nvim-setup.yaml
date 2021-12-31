@@ -134,6 +134,8 @@
           dest: '{{ neovim_pack_dir }}/nvim-telescope/start/telescope.nvim'
         - url: 'https://github.com/neovim/nvim-lspconfig.git'
           dest: '{{ neovim_pack_dir }}/neovim/start/nvim-lspconfig'
+        - url: 'https://github.com/williamboman/nvim-lsp-installer.git'
+          dest: '{{ neovim_pack_dir }}/williamboman/start/nvim-lsp-installer'
         - url: 'https://github.com/nvim-lua/plenary.nvim.git'
           dest: '{{ neovim_pack_dir }}/nvim-lua/start/plenary.nvim'
         - url: 'https://github.com/nvim-treesitter/nvim-treesitter.git'
