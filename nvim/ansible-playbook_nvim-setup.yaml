@@ -138,6 +138,16 @@
           dest: '{{ neovim_pack_dir }}/nvim-lua/start/plenary.nvim'
         - url: 'https://github.com/nvim-treesitter/nvim-treesitter.git'
           dest: '{{ neovim_pack_dir }}/nvim-treesitter/start/nvim-treesitter'
+        - url: 'https://github.com/hrsh7th/nvim-cmp.git'
+          dest: '{{ neovim_pack_dir }}/hrsh7th/start/nvim-cmp'
+        - url: 'https://github.com/hrsh7th/cmp-nvim-lsp.git'
+          dest: '{{ neovim_pack_dir }}/hrsh7th/start/cmp-nvim-lsp'
+        - url: 'https://github.com/hrsh7th/cmp-path.git'
+          dest: '{{ neovim_pack_dir }}/hrsh7th/start/cmp-path'
+        - url: 'https://github.com/hrsh7th/cmp-buffer.git'
+          dest: '{{ neovim_pack_dir }}/hrsh7th/start/cmp-buffer'
+        - url: 'https://github.com/hrsh7th/cmp-cmdline.git'
+          dest: '{{ neovim_pack_dir }}/hrsh7th/start/cmp-cmdline'
     - name: Install Neovim LSP Servers
       community.general.npm:
         name: '{{ item }}'
