@@ -1,0 +1,141 @@
+---
+- name: Neovim Setup
+  hosts: '{{ host_grp | default("localhost") }}'
+  gather_facts: true
+  tags:
+    - neovim
+    - nvim
+  vars:
+    neovim_config_dir: '{{ ansible_user_home }}/.config/nvim'
+    neovim_data_dir: '{{ ansible_user_home }}/.local/share/nvim'
+    neovim_pack_dir: '{{ neovim_data_dir }}/site/pack'
+    neovim_ft_dir: '{{ neovim_data_dir }}/site/ftplugin'
+    neovim_channel: 'stable'
+  tasks:
+    - name: Install Neovim on Fedora
+      ansible.builtin.package:
+        name:
+          - neovim
+          - python-neovim
+          - python3-neovim
+          - nodejs
+          - npm
+          - yarnpkg
+          - ripgrep
+          - fd-find
+      become: true
+      become_user: root
+      become_method: sudo
+      when: ( ansible_distribution == 'Fedora' )
+    - name: Add Neovim PPA for Ubuntu/Pop!_OS
+      ansible.builtin.apt_repository: 
+        repo: 'ppa:neovim-ppa/{{ neovim_channel | default("stable") }}'
+      become: true
+      become_user: root
+      become_method: sudo
+      when: ( ansible_distribution == 'Pop!_OS' ) or
+            ( ansible_distribution == 'Ubuntu' )
+    - name: Install Neovim on Ubuntu/Pop!_OS
+      ansible.builtin.package:
+        name:
+          - neovim
+          - python3-neovim
+          - nodejs
+          - npm
+          - yarnpkg
+          - ripgrep
+          - fd-find
+      become: true
+      become_user: root
+      become_method: sudo
+      when: ( ansible_distribution == 'Pop!_OS' ) or
+            ( ansible_distribution == 'Ubuntu' )
+    - name: Create Neovim Directories
+      ansible.builtin.file:
+        path: '{{ item }}'
+        state: directory
+        recurse: true
+      loop:
+        - '{{ neovim_config_dir }}'
+        - '{{ neovim_pack_dir }}'
+        - '{{ neovim_ft_dir }}'
+    - name: Download/Install markdown.vim
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/FilBot3/Vim_Setup/master/nvim/ftplugin/markdown.vim
+        dest: '{{ neovim_ft_dir }}/markdown.vim'
+        mode: '0644'
+    - name: Download/Install rust.vim
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/FilBot3/Vim_Setup/master/nvim/ftplugin/rust.vim
+        dest: '{{ neovim_ft_dir }}/rust.vim'
+        mode: '0644'
+    - name: Download/Install terraform.vim
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/FilBot3/Vim_Setup/master/nvim/ftplugin/terraform.vim
+        dest: '{{ neovim_ft_dir }}/terraform.vim'
+        mode: '0644'
+    - name: Download/Install cs.vim
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/FilBot3/Vim_Setup/master/nvim/ftplugin/cs.vim
+        dest: '{{ neovim_ft_dir }}/cs.vim'
+        mode: '0644'
+    - name: Download/Install init.lua
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/FilBot3/Vim_Setup/master/nvim/init.lua
+        dest: '{{ neovim_config_dir }}/init.lua'
+        mode: '0644'
+    - name: Clone/Install Plugins
+      ansible.builtin.git:
+        repo: '{{ item.url }}'
+        dest: '{{ item.dest }}'
+        single_branch: true
+      loop:
+#        - url: 'https://github.com/plasticboy/vim-markdown.git'
+#          dest: '{{ neovim_pack_dir }}/plasticboy/start/vim-markdown'
+#        - url: 'https://github.com/godlygeek/tabular.git'
+#          dest: '{{ neovim_pack_dir }}/godlygeek/start/tabular'
+#        - url: 'https://github.com/dense-analysis/ale.git'
+#          dest: '{{ neovim_pack_dir }}/dense-analysis/start/ale'
+#        - url: 'https://github.com/junegunn/fzf.vim.git'
+#          dest: '{{ neovim_pack_dir }}/junegunn/start/fzf.vim'
+#        - url: 'https://github.com/junegunn/fzf.git'
+#          dest: '{{ neovim_pack_dir }}/junegunn/start/fzf'
+#        - url: 'https://github.com/junegunn/goyo.vim.git'
+#          dest: '{{ neovim_pack_dir }}/junegunn/start/goyo.vim'
+#        - url: 'https://github.com/OmniSharp/omnisharp-vim.git'
+#          dest: '{{ neovim_pack_dir }}/OmniSharp/start/omnisharp-vim'
+#        - url: 'https://github.com/rust-lang/rust.vim.git'
+#          dest: '{{ neovim_pack_dir }}/rust-lang/start/rust.vim'
+        - url: 'https://github.com/vim-airline/vim-airline.git'
+          dest: '{{ neovim_pack_dir }}/vim-airline/start/vim-airline'
+        - url: 'https://github.com/ajmwagar/vim-deus.git'
+          dest: '{{ neovim_pack_dir }}/ajmwagar/start/vim-deus'
+#        - url: 'https://github.com/tpope/vim-endwise.git'
+#          dest: '{{ neovim_pack_dir }}/tpope/start/vim-endwise'
+#        - url: 'https://github.com/tpope/vim-fugitive.git'
+#          dest: '{{ neovim_pack_dir }}/tpope/start/vim-fugitive'
+#        - url: 'https://github.com/fatih/vim-go.git'
+#          dest: '{{ neovim_pack_dir }}/fatih/start/vim-go'
+#        - url: 'https://github.com/ludovicchabant/vim-gutentags.git'
+#          dest: '{{ neovim_pack_dir }}/ludovicchabant/start/vim-gutentags'
+        - url: 'https://github.com/mzlogin/vim-markdown-toc.git'
+          dest: '{{ neovim_pack_dir }}/mzlogin/start/vim-markdown-toc'
+#        - url: 'https://github.com/hashivim/vim-terraform.git'
+#          dest: '{{ neovim_pack_dir }}/hashivim/start/vim-terraform'
+        - url: 'https://github.com/sotte/presenting.vim.git'
+          dest: '{{ neovim_pack_dir }}/sotte/start/presenting.vim'
+#        - url: 'https://github.com/ekalinin/dockerfile.vim.git'
+#          dest: '{{ neovim_pack_dir }}/ekalinin/dockerfile.vim'
+        - url: 'https://github.com/aserebryakov/vim-todo-lists.git'
+          dest: '{{ neovim_pack_dir }}/aserebryakov/start/vim-todo-lists'
+#        - url: 'https://github.com/neoclide/coc.nvim.git'
+#          dest: '{{ neovim_pack_dir }}/neoclide/start/coc.nvim'
+        - url: 'https://github.com/nvim-telescope/telescope.nvim.git'
+          dest: '{{ neovim_pack_dir }}/nvim-telescope/start/telescope.nvim'
+        - url: 'https://github.com/neovim/nvim-lspconfig.git'
+          dest: '{{ neovim_pack_dir }}/neovim/start/nvim-lspconfig'
+        - url: 'https://github.com/nvim-lua/plenary.nvim.git'
+          dest: '{{ neovim_pack_dir }}/nvim-lua/start/plenary.nvim'
+        - url: 'https://github.com/nvim-treesitter/nvim-treesitter.git'
+          dest: '{{ neovim_pack_dir }}/nvim-treesitter/start/nvim-treesitter'
+...

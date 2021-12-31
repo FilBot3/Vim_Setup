@@ -41,3 +41,21 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 vim.api.nvim_exec([[
 autocmd BufWritePre * %s/\s\+$//e
 ]], true)
+
+-- Telescope Keybindings
+vim.api.nvim_exec([[
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+]], true)
+
+require('telescope').setup({
+  defaults = {
+    layout_config = {},
+    -- other default configs.
+  },
+  pickers = {},
+  extensions = {},
+  -- other configuration values here
+})
