@@ -21,6 +21,7 @@ vim.opt.syntax = "on"
 vim.opt.showcmd = true
 vim.opt.cursorline = true
 vim.cmd([[ colorscheme deus ]])
+vim.cmd([[ hi Normal cterm=NONE ctermbg=NONE ]]) -- Transparent Background.
 vim.opt.foldenable = true
 vim.opt.breakindent = true
 vim.opt.showmatch = true
@@ -65,7 +66,6 @@ require('telescope').setup({
 -- Requires NodeJS and npm to be available in your PATH.
 -- @see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 
-vim.lsp.diagnostic.show_line_diagnostics()
 
 require'lspconfig'.bashls.setup{}
 require'lspconfig'.dockerls.setup{}
